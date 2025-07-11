@@ -58,7 +58,7 @@ function Effect() {
                 {visible ? "숨기기" : "보이기"}
             </button>
             <hr />
-            {visible && "보이니?"}
+            {visible && "내가 보이니?"}
         </div>
     );
 }
