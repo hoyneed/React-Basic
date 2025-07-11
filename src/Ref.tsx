@@ -1,9 +1,8 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
-function Memo() {
-    // useMemo
-    // useMemo를 사용하면 함수 컴포넌트 내부에서 발생하는 연산을 최적화 할 수 있습니다.
-    // 먼저, 리스트에 숫자를 추가하면 추가된 숫자들의 평균을 보여 주는 함수 컴포넌트를 작성해 봅시다.
+function Ref() {
+    // useRef Hook은 함수 컴포넌트에서 ref를 쉽게 사용할 수 있게 해줍니다.
+    // Ref 컴포넌트에서 등록 버튼을 눌렀을 때, 포커스가 인풋 태그 쪽으로 넘어가도록 코드를 작성해 보겠습니다.
     const getAverage = (numbers: number[]) => {
         console.log("평균값을 계산 중입니다.");
         if (numbers.length === 0) return 0;
@@ -13,16 +12,21 @@ function Memo() {
 
     const [list, setList] = useState<number[]>([]);
     const [number, setNumber] = useState<string>("");
+    const inputElement = useRef<HTMLInputElement>(null);
 
-    const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNumber(event.target.value);
-    };
-
-    const onInsert = () => {
+    const onChange = useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setNumber(event.target.value);
+        },
+        []
+    );
+    const onInsert = useCallback(() => {
         const nextList = list.concat(parseInt(number));
         setList(nextList);
-        setNumber(""); //
-    };
+        setNumber("");
+        //useRef
+        inputElement.current?.focus();
+    }, [number, list]);
 
     const avg = useMemo(() => getAverage(list), [list]);
 
@@ -36,11 +40,11 @@ function Memo() {
                 })}
             </ul>
             <div>
-                <b>평균값:</b> {/* getAverage(list) */}
+                <b>평균값:</b>
                 {avg}
             </div>
         </div>
     );
 }
 
-export default Memo;
+export default Ref;
